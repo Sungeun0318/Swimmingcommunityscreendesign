@@ -37,23 +37,33 @@ interface Post {
   image?: string;
 }
 
-export function PostCard({ post }: { post: Post }) {
+interface PostCardProps {
+  post: Post;
+  onUserClick?: (user: any) => void;
+  onFollowClick?: (userId: number) => void;
+  isFollowing?: boolean;
+}
+
+export function PostCard({ post, onUserClick, onFollowClick, isFollowing = false }: PostCardProps) {
   const [liked, setLiked] = useState(false);
 
   return (
     <div className="bg-white dark:bg-card rounded-2xl shadow-sm overflow-hidden transition-colors duration-300">
       {/* User Info */}
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <button
+          onClick={() => onUserClick?.(post.user)}
+          className="flex items-center gap-3 flex-1 min-w-0 hover:opacity-80 transition-opacity"
+        >
           <img 
             src={post.user.avatar} 
             alt={post.user.name}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100 dark:ring-cyan-900"
+            className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100 dark:ring-cyan-900 flex-shrink-0"
           />
-          <div>
+          <div className="flex-1 min-w-0 text-left">
             <div className="flex items-center gap-2">
-              <span className="text-gray-900 dark:text-card-foreground">{post.user.name}</span>
-              <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${
+              <span className="text-gray-900 dark:text-card-foreground truncate">{post.user.name}</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 whitespace-nowrap ${
                 post.user.level === 'Coach' || post.user.level === 'Head Coach' 
                   ? 'bg-gradient-to-r from-blue-500 to-purple-500 dark:from-cyan-500 dark:to-blue-500 text-white' 
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -64,17 +74,26 @@ export function PostCard({ post }: { post: Post }) {
                 {post.user.level}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-              <span>{post.user.club}</span>
+            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 truncate">
+              <span className="truncate">{post.user.club}</span>
               <span>•</span>
               <span>{post.timeAgo}</span>
             </div>
           </div>
-        </div>
-        
-        <button className="px-4 py-1.5 bg-blue-500 dark:bg-cyan-500 text-white text-sm rounded-full hover:bg-blue-600 dark:hover:bg-cyan-600 transition-colors">
-          Follow
         </button>
+        
+        {onFollowClick && (
+          <button
+            onClick={() => onFollowClick(post.user.id)}
+            className={`px-4 py-1.5 text-sm rounded-full transition-colors ml-2 whitespace-nowrap ${
+              isFollowing
+                ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-blue-500 dark:bg-cyan-500 text-white hover:bg-blue-600 dark:hover:bg-cyan-600'
+            }`}
+          >
+            {isFollowing ? 'Following' : 'Follow'}
+          </button>
+        )}
       </div>
 
       {/* Workout Title & Info */}
