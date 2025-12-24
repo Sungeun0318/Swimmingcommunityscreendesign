@@ -8,11 +8,11 @@ interface BottomNavigationProps {
 
 export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
   const tabs = [
-    { id: 'home', icon: Home, label: 'Home' },
-    { id: 'community', icon: Users, label: 'Community' },
-    { id: 'scheduler', icon: Calendar, label: 'Scheduler' },
-    { id: 'training', icon: Waves, label: 'Training' },
-    { id: 'profile', icon: User, label: 'Profile' },
+    { id: 'home', icon: Home, label: '홈' },
+    { id: 'community', icon: Users, label: '커뮤니티' },
+    { id: 'scheduler', icon: Calendar, label: '스케줄러' },
+    { id: 'training', icon: Waves, label: '훈련' },
+    { id: 'profile', icon: User, label: '프로필' },
   ];
 
   return (

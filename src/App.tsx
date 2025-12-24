@@ -7,11 +7,15 @@ import { Training } from './components/Training';
 import { Profile } from './components/Profile';
 import { BottomNavigation } from './components/BottomNavigation';
 import { CreatePost } from './components/CreatePost';
+import { PremiumSubscriptionModal } from './components/PremiumSubscriptionModal';
+import { LoginScreen } from './components/LoginScreen';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -29,10 +33,28 @@ function App() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  // Show login screen if not logged in
+  if (!isLoggedIn) {
+    return (
+      <div className={isDarkMode ? 'dark' : ''}>
+        <LoginScreen onLogin={handleLogin} />
+      </div>
+    );
+  }
+
   return (
     <div className={isDarkMode ? 'dark' : ''}>
       <div className="min-h-screen bg-background transition-colors duration-300">
-        <Header isDarkMode={isDarkMode} onToggleDarkMode={toggleDarkMode} />
+        <Header 
+          isDarkMode={isDarkMode} 
+          onToggleDarkMode={toggleDarkMode}
+          onOpenPremium={() => setShowPremiumModal(true)}
+          onLogoClick={() => setActiveTab('home')}
+        />
         
         <main className="max-w-md mx-auto pt-16">
           {activeTab === 'home' && <Home onNavigate={handleNavigate} onCreatePost={handleCreatePost} />}
@@ -45,6 +67,7 @@ function App() {
         <BottomNavigation activeTab={activeTab} onTabChange={handleTabChange} />
         
         {showCreatePost && <CreatePost onClose={() => setShowCreatePost(false)} />}
+        {showPremiumModal && <PremiumSubscriptionModal onClose={() => setShowPremiumModal(false)} />}
       </div>
     </div>
   );

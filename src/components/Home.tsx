@@ -59,7 +59,7 @@ export function Home({ onNavigate, onCreatePost }: HomeProps) {
   return (
     <div className="px-4 space-y-3 pb-24">
       {/* Profile Summary - Streak Only */}
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 dark:from-cyan-500 dark:to-blue-500 text-white rounded-2xl p-5 shadow-lg transition-all duration-300">
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 dark:from-cyan-500 dark:to-blue-600 text-white rounded-2xl p-5 shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <img 
@@ -107,13 +107,13 @@ export function Home({ onNavigate, onCreatePost }: HomeProps) {
         </button>
 
         <button 
-          onClick={() => onNavigate('scheduler')}
+          onClick={() => onNavigate('training')}
           className="bg-white dark:bg-card rounded-xl p-4 shadow-sm hover:shadow-md transition-all border-2 border-transparent hover:border-blue-300 dark:hover:border-cyan-400"
         >
           <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-400 dark:to-emerald-500 rounded-xl flex items-center justify-center mb-2 mx-auto">
             <Target className="w-5 h-5 text-white" />
           </div>
-          <div className="text-sm text-gray-900 dark:text-card-foreground">스케줄러 열기</div>
+          <div className="text-sm text-gray-900 dark:text-card-foreground">퀵스타트</div>
         </button>
       </div>
 

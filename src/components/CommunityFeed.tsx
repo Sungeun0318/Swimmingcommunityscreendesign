@@ -48,20 +48,20 @@ export function CommunityFeed({
   };
 
   const filterOptions = [
-    { id: 'All', label: 'All Posts', color: 'from-gray-500 to-gray-600' },
-    { id: 'Following', label: 'Following', color: 'from-blue-500 to-cyan-500' },
-    { id: 'Beginner', label: 'Beginner', color: 'from-green-500 to-emerald-500' },
-    { id: 'Intermediate', label: 'Intermediate', color: 'from-yellow-500 to-orange-500' },
-    { id: 'Advanced', label: 'Advanced', color: 'from-orange-500 to-red-500' },
-    { id: 'Elite', label: 'Elite', color: 'from-red-500 to-rose-600' }
+    { id: 'All', label: '전체 게시물', color: 'from-gray-500 to-gray-600' },
+    { id: 'Following', label: '팔로잉', color: 'from-blue-500 to-cyan-500' },
+    { id: 'Beginner', label: '초급', color: 'from-green-500 to-emerald-500' },
+    { id: 'Intermediate', label: '중급', color: 'from-yellow-500 to-orange-500' },
+    { id: 'Advanced', label: '상급', color: 'from-orange-500 to-red-500' },
+    { id: 'Elite', label: '엘리트', color: 'from-red-500 to-rose-600' }
   ];
 
   const trendingPosts = [
-    { id: 1, title: '🔥 Olympic Coach Freestyle Masterclass', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
-    { id: 2, title: '💪 Master Breaststroke in 7 Days', likes: 892, image: 'https://images.unsplash.com/photo-1530115638250-8f7f42475f5e?w=400&h=200&fit=crop' },
-    { id: 3, title: '⚡ World Champion Backstroke Turn Secrets', likes: 756, image: 'https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=400&h=200&fit=crop' },
-    { id: 4, title: '🏊 IM Training for Competition Swimmers', likes: 645, image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400&h=200&fit=crop' },
-    { id: 5, title: '🌊 Open Water Swimming Tips & Techniques', likes: 589, image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&h=200&fit=crop' }
+    { id: 1, title: '🔥 올림픽 코치의 자유형 마스터클래스', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
+    { id: 2, title: '💪 7일만에 평영 마스터하기', likes: 892, image: 'https://images.unsplash.com/photo-1530115638250-8f7f42475f5e?w=400&h=200&fit=crop' },
+    { id: 3, title: '⚡ 세계 챔피언의 배영 턴 비법', likes: 756, image: 'https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=400&h=200&fit=crop' },
+    { id: 4, title: '🏊 경기 수영 선수를 위한 혼영 훈련', likes: 645, image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400&h=200&fit=crop' },
+    { id: 5, title: '🌊 오픈워터 수영 팁 & 테크닉', likes: 589, image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&h=200&fit=crop' }
   ];
 
   const mockPosts = [
@@ -219,7 +219,7 @@ export function CommunityFeed({
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
               }`}
             >
-              All Posts
+              전체 게시물
             </button>
             <button
               onClick={() => setActiveView('my')}
@@ -229,7 +229,7 @@ export function CommunityFeed({
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
               }`}
             >
-              My Posts ({myPosts.length})
+              내 게시물 ({myPosts.length})
             </button>
           </div>
 
@@ -301,7 +301,7 @@ export function CommunityFeed({
         >
           <div className="flex items-center gap-2 px-4 pt-3 pb-2">
             <Flame className="w-5 h-5 text-orange-500 dark:text-orange-400" />
-            <h3 className="text-gray-900 dark:text-gray-100">Trending Now</h3>
+            <h3 className="text-gray-900 dark:text-gray-100">지금 뜨는 훈련</h3>
           </div>
 
           <div 
@@ -372,16 +372,16 @@ export function CommunityFeed({
                 <Crown className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Upgrade to Premium</h3>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">프리미엄으로 업그레이드</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  Remove ads, unlock exclusive workouts, and get priority support
+                  광고 제거, 독점 훈련 잠금 해제, 우선 지원
                 </p>
                 <div className="flex gap-2">
                   <button className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all">
-                    Try Free for 7 Days
+                    7일 무료 체험
                   </button>
                   <button className="px-4 py-2 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-white/80 dark:hover:bg-gray-700/80 transition-all">
-                    Learn More
+                    더 알아보기
                   </button>
                 </div>
               </div>

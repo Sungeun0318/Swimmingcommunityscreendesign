@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronRight, Crown, CreditCard, Lock, HelpCircle, FileText, MessageSquare, UserX, Receipt, LogOut, UserMinus, Moon, Sun, User, Mail, Phone, Calendar, Bell, Heart, Trophy, MessageCircle, Users } from 'lucide-react';
+import { PremiumSubscriptionModal } from './PremiumSubscriptionModal';
 
 interface ProfileProps {
   isDarkMode: boolean;
@@ -9,6 +10,7 @@ interface ProfileProps {
 export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
   const [isEditingProfile, setIsEditingProfile] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState<'profile' | 'notifications'>('profile');
+  const [showPremiumModal, setShowPremiumModal] = React.useState(false);
 
   const user = {
     name: '김수영',
@@ -49,6 +51,9 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
   const handleSettingClick = (action: string) => {
     console.log(`Setting clicked: ${action}`);
     // 여기서 각 설정 페이지로 이동하거나 모달을 열 수 있습니다
+    if (action === 'premium') {
+      setShowPremiumModal(true);
+    }
   };
 
   const notifications = [
@@ -146,7 +151,7 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
       {activeSection === 'profile' && (
         <>
           {/* Profile Header */}
-          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-cyan-600 dark:to-blue-600 rounded-2xl p-6 text-white transition-all duration-300">
+          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-cyan-500 dark:to-blue-600 rounded-2xl p-6 text-white transition-all duration-300">
             <div className="flex items-center gap-4 mb-4">
               <div className="relative">
                 <img 
@@ -345,7 +350,7 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
       {activeSection === 'notifications' && (
         <>
           {/* Notifications Header */}
-          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-cyan-600 dark:to-blue-600 rounded-2xl p-6 text-white transition-all duration-300">
+          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-cyan-500 dark:to-blue-600 rounded-2xl p-6 text-white transition-all duration-300">
             <div className="flex items-center gap-4 mb-4">
               <div className="relative">
                 <img 
@@ -503,6 +508,13 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
             <p className="text-xs mt-1">© 2024 All rights reserved</p>
           </div>
         </>
+      )}
+
+      {/* Premium Subscription Modal */}
+      {showPremiumModal && (
+        <PremiumSubscriptionModal
+          onClose={() => setShowPremiumModal(false)}
+        />
       )}
     </div>
   );
