@@ -16,10 +16,10 @@ interface MonthlyStatsModalProps {
 export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
   // Weekly workout data for chart
   const weeklyData = [
-    { week: 'Week 1', workouts: 4, distance: 8.5 },
-    { week: 'Week 2', workouts: 5, distance: 11.2 },
-    { week: 'Week 3', workouts: 4, distance: 7.8 },
-    { week: 'Week 4', workouts: 5, distance: 9.0 },
+    { week: '1주차', workouts: 4, distance: 8.5 },
+    { week: '2주차', workouts: 5, distance: 11.2 },
+    { week: '3주차', workouts: 4, distance: 7.8 },
+    { week: '4주차', workouts: 5, distance: 9.0 },
   ];
 
   // Daily distance data
@@ -49,7 +49,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gradient-to-br from-blue-500 to-purple-600">
           <div className="flex items-center gap-2 text-white">
             <TrendingUp className="w-6 h-6" />
-            <h2 className="text-xl">Monthly Statistics</h2>
+            <h2 className="text-xl">이번 달 통계</h2>
           </div>
           <button
             onClick={onClose}
@@ -66,37 +66,37 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total Workouts</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">총 운동</span>
               </div>
-              <p className="text-2xl text-blue-600 dark:text-blue-400">{stats.totalWorkouts}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">sessions completed</p>
+              <p className="text-2xl text-blue-600 dark:text-blue-400">{stats.totalWorkouts}회</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">완료된 세션</p>
             </div>
 
             <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
               <div className="flex items-center gap-2 mb-2">
                 <Waves className="w-5 h-5 text-green-600 dark:text-green-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total Distance</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">총 거리</span>
               </div>
               <p className="text-2xl text-green-600 dark:text-green-400">{stats.totalDistance}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">swimming distance</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">수영 거리</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Total Time</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">총 시간</span>
               </div>
               <p className="text-lg text-purple-600 dark:text-purple-400">{stats.totalTime}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">in the pool</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">수영장에서</p>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl p-4 border border-orange-200 dark:border-orange-800">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Completion Rate</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">달성률</span>
               </div>
               <p className="text-2xl text-orange-600 dark:text-orange-400">{stats.completionRate}%</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">goals achieved</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">목표 달성</p>
             </div>
           </div>
 
@@ -104,7 +104,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
             <h3 className="text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-blue-500 dark:text-cyan-400" />
-              Weekly Progress
+              주간 진행 상황
             </h3>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={weeklyData}>
@@ -127,7 +127,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
                 <Legend 
                   wrapperStyle={{ fontSize: '12px' }}
                 />
-                <Bar dataKey="workouts" fill="#3b82f6" name="Workouts" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="workouts" fill="#3b82f6" name="운동 횟수" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -136,7 +136,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
             <h3 className="text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Waves className="w-5 h-5 text-green-500 dark:text-green-400" />
-              Daily Distance Trend
+              일일 거리 추이
             </h3>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={dailyData}>
@@ -144,7 +144,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
                 <XAxis 
                   dataKey="day" 
                   tick={{ fill: '#6b7280', fontSize: 12 }}
-                  label={{ value: 'Day of Month', position: 'insideBottom', offset: -5, fontSize: 12 }}
+                  label={{ value: '날짜', position: 'insideBottom', offset: -5, fontSize: 12 }}
                 />
                 <YAxis 
                   tick={{ fill: '#6b7280', fontSize: 12 }}
@@ -157,7 +157,7 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
                     borderRadius: '8px',
                     fontSize: '12px'
                   }}
-                  formatter={(value) => [`${value} km`, 'Distance']}
+                  formatter={(value) => [`${value} km`, '거리']}
                 />
                 <Line 
                   type="monotone" 
@@ -175,20 +175,20 @@ export function MonthlyStatsModal({ onClose, stats }: MonthlyStatsModalProps) {
           <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-cyan-200 dark:border-cyan-800">
             <h3 className="text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-              Insights
+              인사이트
             </h3>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="text-green-500 mt-0.5">✓</span>
-                <span>You're averaging <strong>{stats.avgPerWeek} workouts per week</strong> - Great consistency!</span>
+                <span>주평균 <strong>{stats.avgPerWeek}회</strong> 운동 - 훌륭한 꾸준함이에요!</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-500 mt-0.5">✓</span>
-                <span>Your completion rate is <strong>{stats.completionRate}%</strong> - Keep it up!</span>
+                <span>달성률 <strong>{stats.completionRate}%</strong> - 계속 해나가세요!</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-purple-500 mt-0.5">✓</span>
-                <span>Most productive week: <strong>Week 2</strong> with 11.2km</span>
+                <span>가장 많이 수영한 주: <strong>2주차</strong> 11.2km</span>
               </li>
             </ul>
           </div>
