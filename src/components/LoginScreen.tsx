@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Waves, Droplet, TrendingUp, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import logo from 'figma:asset/fe48e338294f1c5b5719c23795f4728078fb676c.png';
 import brandImage from 'figma:asset/8dfb1fcc657ed6b91f860fad74c74ddf8dc27a3d.png';
+import { SignupModal } from './SignupModal';
+import { ForgotPasswordModal } from './ForgotPasswordModal';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -11,6 +13,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,7 +157,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 />
                 <span className="text-gray-600 dark:text-gray-400">로그인 유지</span>
               </label>
-              <button type="button" className="text-blue-600 dark:text-cyan-400 hover:underline">
+              <button type="button" className="text-blue-600 dark:text-cyan-400 hover:underline" onClick={() => setShowForgotPasswordModal(true)}>
                 비밀번호 찾기
               </button>
             </div>
@@ -169,7 +173,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-600 dark:text-gray-400">
               계정이 없으신가요?{' '}
-              <button type="button" className="text-blue-600 dark:text-cyan-400 hover:underline">
+              <button type="button" className="text-blue-600 dark:text-cyan-400 hover:underline" onClick={() => setShowSignupModal(true)}>
                 회원가입
               </button>
             </p>
@@ -235,6 +239,23 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           </p>
         </div>
       </div>
+
+      {/* Modals */}
+      {showSignupModal && (
+        <SignupModal
+          onClose={() => setShowSignupModal(false)}
+          onSignup={() => {
+            setShowSignupModal(false);
+            onLogin();
+          }}
+        />
+      )}
+
+      {showForgotPasswordModal && (
+        <ForgotPasswordModal
+          onClose={() => setShowForgotPasswordModal(false)}
+        />
+      )}
     </div>
   );
 }
