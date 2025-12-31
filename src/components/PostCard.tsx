@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Share2, Clock, Waves, Award, Bookmark, TrendingUp } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Clock, Waves, Award, Bookmark, TrendingUp, MoreVertical, Flag, EyeOff } from 'lucide-react';
+import { ReportPostModal } from './ReportPostModal';
 
 interface WorkoutStep {
   step: number;
@@ -14,6 +15,7 @@ interface WorkoutStep {
 interface Post {
   id: number;
   user: {
+    id?: number;
     name: string;
     avatar: string;
     level: string;
@@ -35,6 +37,8 @@ interface Post {
     saves: number;
   };
   image?: string;
+  isReported?: boolean;
+  reportCount?: number;
 }
 
 interface PostCardProps {
@@ -46,9 +50,45 @@ interface PostCardProps {
 
 export function PostCard({ post, onUserClick, onFollowClick, isFollowing = false }: PostCardProps) {
   const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+
+  // 신고 누적으로 숨김 처리된 게시물
+  if (post.isReported && (post.reportCount ?? 0) >= 3) {
+    return (
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+        <EyeOff className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-3" />
+        <h4 className="text-gray-600 dark:text-gray-400 mb-2">신고 누적으로 검토 중인 게시물</h4>
+        <p className="text-sm text-gray-500 dark:text-gray-500">
+          이 게시물은 여러 사용자의 신고로 인해 임시로 숨김 처리되었습니다.
+        </p>
+      </div>
+    );
+  }
+
+  const handleLikeToggle = () => {
+    setLiked(!liked);
+    // 애니메이션 효과
+    if (!liked) {
+      const button = document.getElementById(`like-btn-${post.id}`);
+      button?.classList.add('animate-bounce');
+      setTimeout(() => button?.classList.remove('animate-bounce'), 500);
+    }
+  };
+
+  const handleSaveToggle = () => {
+    setSaved(!saved);
+    // 애니메이션 효과
+    if (!saved) {
+      const button = document.getElementById(`save-btn-${post.id}`);
+      button?.classList.add('animate-bounce');
+      setTimeout(() => button?.classList.remove('animate-bounce'), 500);
+    }
+  };
 
   return (
-    <div className="bg-white dark:bg-card rounded-2xl shadow-sm overflow-hidden transition-colors duration-300">
+    <div className="bg-white dark:bg-card rounded-2xl shadow-sm overflow-hidden transition-colors duration-300 relative">
       {/* User Info */}
       <div className="p-4 flex items-center justify-between">
         <button
@@ -93,6 +133,39 @@ export function PostCard({ post, onUserClick, onFollowClick, isFollowing = false
           >
             {isFollowing ? 'Following' : 'Follow'}
           </button>
+        )}
+        
+        {/* 메뉴 버튼 */}
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+        >
+          <MoreVertical className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        </button>
+        
+        {/* 메뉴 */}
+        {showMenu && (
+          <div className="absolute top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-md z-10">
+            <button
+              onClick={() => setShowReportModal(true)}
+              className="w-full px-4 py-2 text-left text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Flag className="w-4 h-4 inline-block mr-2" />
+              신고하기
+            </button>
+          </div>
+        )}
+        
+        {/* 신고 모달 */}
+        {showReportModal && (
+          <ReportPostModal
+            postId={post.id}
+            postAuthor={post.user.name}
+            onClose={() => {
+              setShowReportModal(false);
+              setShowMenu(false);
+            }}
+          />
         )}
       </div>
 
@@ -205,32 +278,43 @@ export function PostCard({ post, onUserClick, onFollowClick, isFollowing = false
       <div className="px-4 py-3 flex items-center justify-between border-t border-gray-100 dark:border-gray-700">
         <div className="flex items-center gap-4">
           <button 
-            onClick={() => setLiked(!liked)}
+            id={`like-btn-${post.id}`}
+            onClick={handleLikeToggle}
             className="flex items-center gap-2 group"
           >
             <Heart 
-              className={`w-5 h-5 transition-colors ${
-                liked ? 'fill-red-500 text-red-500' : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500'
+              className={`w-5 h-5 transition-all duration-300 ${
+                liked ? 'fill-red-500 text-red-500 scale-110' : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 group-hover:scale-110'
               }`}
             />
-            <span className={`text-sm ${liked ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'}`}>
+            <span className={`text-sm transition-colors ${liked ? 'text-red-500 font-semibold' : 'text-gray-600 dark:text-gray-400'}`}>
               {post.stats.likes + (liked ? 1 : 0)}
             </span>
           </button>
           
           <button className="flex items-center gap-2 group">
-            <MessageCircle className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-cyan-400 transition-colors" />
+            <MessageCircle className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-cyan-400 group-hover:scale-110 transition-all duration-300" />
             <span className="text-sm text-gray-600 dark:text-gray-400">{post.stats.comments}</span>
           </button>
           
-          <button className="flex items-center gap-2 group">
-            <Bookmark className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 transition-colors" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">{post.stats.saves}</span>
+          <button 
+            id={`save-btn-${post.id}`}
+            onClick={handleSaveToggle}
+            className="flex items-center gap-2 group"
+          >
+            <Bookmark 
+              className={`w-5 h-5 transition-all duration-300 ${
+                saved ? 'fill-yellow-500 text-yellow-500 scale-110' : 'text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 group-hover:scale-110'
+              }`}
+            />
+            <span className={`text-sm transition-colors ${saved ? 'text-yellow-500 font-semibold' : 'text-gray-600 dark:text-gray-400'}`}>
+              {post.stats.saves + (saved ? 1 : 0)}
+            </span>
           </button>
         </div>
 
-        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-          <Share2 className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors group">
+          <Share2 className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:scale-110 transition-transform duration-300" />
         </button>
       </div>
     </div>

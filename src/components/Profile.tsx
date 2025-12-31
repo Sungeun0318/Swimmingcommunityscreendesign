@@ -1,6 +1,13 @@
 import React from 'react';
-import { ChevronRight, Crown, CreditCard, Lock, HelpCircle, FileText, MessageSquare, UserX, Receipt, LogOut, UserMinus, Moon, Sun, User, Mail, Phone, Calendar, Bell, Heart, Trophy, MessageCircle, Users } from 'lucide-react';
+import { ChevronRight, Crown, CreditCard, Lock, HelpCircle, FileText, MessageSquare, UserX, Receipt, LogOut, UserMinus, Moon, Sun, User, Mail, Phone, Calendar, Bell, Heart, Trophy, MessageCircle, Users, Award } from 'lucide-react';
 import { PremiumSubscriptionModal } from './PremiumSubscriptionModal';
+import { CoachVerificationModal } from './CoachVerificationModal';
+import { ChangePasswordModal } from './ChangePasswordModal';
+import { HelpModal } from './HelpModal';
+import { ContactModal } from './ContactModal';
+import { TermsModal } from './TermsModal';
+import { LogoutConfirmModal } from './LogoutConfirmModal';
+import { DeleteAccountModal } from './DeleteAccountModal';
 
 interface ProfileProps {
   isDarkMode: boolean;
@@ -11,6 +18,13 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
   const [isEditingProfile, setIsEditingProfile] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState<'profile' | 'notifications'>('profile');
   const [showPremiumModal, setShowPremiumModal] = React.useState(false);
+  const [showCoachVerificationModal, setShowCoachVerificationModal] = React.useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = React.useState(false);
+  const [showHelpModal, setShowHelpModal] = React.useState(false);
+  const [showContactModal, setShowContactModal] = React.useState(false);
+  const [showTermsModal, setShowTermsModal] = React.useState(false);
+  const [showLogoutConfirmModal, setShowLogoutConfirmModal] = React.useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = React.useState(false);
 
   const user = {
     name: '김수영',
@@ -27,7 +41,7 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
       title: '계정',
       items: [
         { icon: Crown, label: '프리미엄 구독', description: '광고 없이 모든 기능 이용', color: 'text-yellow-600 dark:text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', action: 'premium' },
-        { icon: CreditCard, label: '결제 관리', description: '결제 수단 및 구독 관리', color: 'text-blue-600 dark:text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30', action: 'payment' },
+        { icon: Award, label: '코치 인증', description: '전문 코치 인증으로 신뢰도 UP', color: 'text-blue-600 dark:text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-900/30', action: 'coach-verification' },
         { icon: Lock, label: '비밀번호 변경', description: '계정 보안 설정', color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-100 dark:bg-gray-800', action: 'password' }
       ]
     },
@@ -38,13 +52,6 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
         { icon: MessageSquare, label: '문의하기', description: '1:1 문의 및 제안', color: 'text-purple-600 dark:text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-900/30', action: 'contact' },
         { icon: FileText, label: '약관 및 정책', description: '이용약관, 개인정보처리방침', color: 'text-gray-600 dark:text-gray-400', bgColor: 'bg-gray-100 dark:bg-gray-800', action: 'terms' }
       ]
-    },
-    {
-      title: '개인설정',
-      items: [
-        { icon: UserX, label: '차단된 사용자', description: '차단 목록 관리', color: 'text-red-600 dark:text-red-500', bgColor: 'bg-red-100 dark:bg-red-900/30', action: 'blocked' },
-        { icon: Receipt, label: '결제 내역', description: '구매 및 환불 내역', color: 'text-indigo-600 dark:text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', action: 'receipts' }
-      ]
     }
   ];
 
@@ -53,6 +60,16 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
     // 여기서 각 설정 페이지로 이동하거나 모달을 열 수 있습니다
     if (action === 'premium') {
       setShowPremiumModal(true);
+    } else if (action === 'coach-verification') {
+      setShowCoachVerificationModal(true);
+    } else if (action === 'password') {
+      setShowChangePasswordModal(true);
+    } else if (action === 'help') {
+      setShowHelpModal(true);
+    } else if (action === 'contact') {
+      setShowContactModal(true);
+    } else if (action === 'terms') {
+      setShowTermsModal(true);
     }
   };
 
@@ -309,7 +326,7 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
             <h3 className="text-gray-900 dark:text-gray-100 mb-4">계정 관리</h3>
             <div className="space-y-3">
               <button
-                onClick={() => console.log('Logout')}
+                onClick={() => setShowLogoutConfirmModal(true)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-orange-100 dark:bg-orange-900/30">
@@ -323,7 +340,7 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
               </button>
 
               <button
-                onClick={() => console.log('Delete account')}
+                onClick={() => setShowDeleteAccountModal(true)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               >
                 <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100 dark:bg-red-900/30">
@@ -514,6 +531,60 @@ export function Profile({ isDarkMode, onToggleDarkMode }: ProfileProps) {
       {showPremiumModal && (
         <PremiumSubscriptionModal
           onClose={() => setShowPremiumModal(false)}
+        />
+      )}
+
+      {/* Coach Verification Modal */}
+      {showCoachVerificationModal && (
+        <CoachVerificationModal
+          onClose={() => setShowCoachVerificationModal(false)}
+        />
+      )}
+
+      {/* Change Password Modal */}
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          onClose={() => setShowChangePasswordModal(false)}
+        />
+      )}
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <HelpModal
+          onClose={() => setShowHelpModal(false)}
+        />
+      )}
+
+      {/* Contact Modal */}
+      {showContactModal && (
+        <ContactModal
+          onClose={() => setShowContactModal(false)}
+        />
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <TermsModal
+          onClose={() => setShowTermsModal(false)}
+        />
+      )}
+
+      {/* Logout Confirm Modal */}
+      {showLogoutConfirmModal && (
+        <LogoutConfirmModal
+          onClose={() => setShowLogoutConfirmModal(false)}
+          onConfirm={() => {
+            console.log('Logging out...');
+            setShowLogoutConfirmModal(false);
+            // Here you would actually log out the user
+          }}
+        />
+      )}
+
+      {/* Delete Account Modal */}
+      {showDeleteAccountModal && (
+        <DeleteAccountModal
+          onClose={() => setShowDeleteAccountModal(false)}
         />
       )}
     </div>

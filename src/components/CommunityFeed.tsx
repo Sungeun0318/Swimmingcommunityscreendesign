@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PostCard } from './PostCard';
-import { TrendingUp, Flame, ChevronDown, Check, ChevronLeft, ChevronRight, X, ExternalLink, Crown, Search, UserPlus } from 'lucide-react';
+import { TrendingUp, Flame, ChevronDown, Check, ChevronLeft, ChevronRight, X, ExternalLink, Crown, Search, UserPlus, Calendar } from 'lucide-react';
 import { UserSearch } from './UserSearch';
 import { UserProfile } from './UserProfile';
+import { TrendingPostsSection } from './TrendingPostsSection';
+import { AttendanceCheckModal } from './AttendanceCheckModal';
 
 interface CommunityFeedProps {
   onCreatePost: () => void;
@@ -30,6 +32,7 @@ export function CommunityFeed({
   const [activeView, setActiveView] = useState<'all' | 'my'>('all');
   const [internalFollowingList, setInternalFollowingList] = useState<number[]>([1, 2]);
   const [internalMyPosts, setInternalMyPosts] = useState<any[]>([]);
+  const [showAttendanceModal, setShowAttendanceModal] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const followingList = externalFollowingList !== undefined ? externalFollowingList : internalFollowingList;
@@ -57,7 +60,7 @@ export function CommunityFeed({
   ];
 
   const trendingPosts = [
-    { id: 1, title: '🔥 올림픽 코치의 자유형 마스터클래스', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
+    { id: 1, title: '🔥 올림픽 코치의 자유형 마스��클래스', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
     { id: 2, title: '💪 7일만에 평영 마스터하기', likes: 892, image: 'https://images.unsplash.com/photo-1530115638250-8f7f42475f5e?w=400&h=200&fit=crop' },
     { id: 3, title: '⚡ 세계 챔피언의 배영 턴 비법', likes: 756, image: 'https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=400&h=200&fit=crop' },
     { id: 4, title: '🏊 경기 수영 선수를 위한 혼영 훈련', likes: 645, image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400&h=200&fit=crop' },
@@ -294,73 +297,95 @@ export function CommunityFeed({
 
       {/* Trending Posts Carousel - Only show for "All Posts" view */}
       {activeView === 'all' && (
-        <div 
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 transition-colors duration-300"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          <div className="flex items-center gap-2 px-4 pt-3 pb-2">
-            <Flame className="w-5 h-5 text-orange-500 dark:text-orange-400" />
-            <h3 className="text-gray-900 dark:text-gray-100">지금 뜨는 훈련</h3>
-          </div>
+        <>
+          {/* Attendance Check Button */}
+          <button
+            onClick={() => setShowAttendanceModal(true)}
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-500 dark:from-green-600 dark:to-emerald-600 rounded-2xl p-4 text-white hover:shadow-lg transition-all flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-semibold">출석 체크하기</h3>
+                <p className="text-sm text-white/80">오늘의 출석을 기록하세요!</p>
+              </div>
+            </div>
+            <div className="text-2xl">✅</div>
+          </button>
+
+          {/* Trending Posts Section */}
+          <TrendingPostsSection />
 
           <div 
-            ref={carouselRef}
-            className="flex transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 transition-colors duration-300"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
-            {trendingPosts.map((post) => (
-              <div key={post.id} className="w-full flex-shrink-0 px-4 pb-4">
-                <div className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all cursor-pointer">
-                  <div className="relative h-32 overflow-hidden">
-                    <img 
-                      src={post.image} 
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-white text-sm mb-1">{post.title}</p>
-                    <div className="flex items-center gap-2 text-xs text-white/80">
-                      <TrendingUp className="w-3 h-3" />
-                      <span>{post.likes.toLocaleString()} likes</span>
+            <div className="flex items-center gap-2 px-4 pt-3 pb-2">
+              <Flame className="w-5 h-5 text-orange-500 dark:text-orange-400" />
+              <h3 className="text-gray-900 dark:text-gray-100">지금 뜨는 훈련</h3>
+            </div>
+
+            <div 
+              ref={carouselRef}
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {trendingPosts.map((post) => (
+                <div key={post.id} className="w-full flex-shrink-0 px-4 pb-4">
+                  <div className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all cursor-pointer">
+                    <div className="relative h-32 overflow-hidden">
+                      <img 
+                        src={post.image} 
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className="text-white text-sm mb-1">{post.title}</p>
+                      <div className="flex items-center gap-2 text-xs text-white/80">
+                        <TrendingUp className="w-3 h-3" />
+                        <span>{post.likes.toLocaleString()} likes</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-lg"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-lg"
-          >
-            <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-          </button>
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-lg"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm flex items-center justify-center hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-lg"
+            >
+              <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+            </button>
 
-          {/* Indicators */}
-          <div className="flex items-center justify-center gap-1.5 pb-3">
-            {trendingPosts.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`h-1.5 rounded-full transition-all ${
-                  index === currentSlide 
-                    ? 'w-6 bg-orange-500 dark:bg-orange-400' 
-                    : 'w-1.5 bg-gray-300 dark:bg-gray-600 hover:bg-orange-300 dark:hover:bg-orange-500'
-                }`}
-              />
-            ))}
+            {/* Indicators */}
+            <div className="flex items-center justify-center gap-1.5 pb-3">
+              {trendingPosts.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === currentSlide 
+                      ? 'w-6 bg-orange-500 dark:bg-orange-400' 
+                      : 'w-1.5 bg-gray-300 dark:bg-gray-600 hover:bg-orange-300 dark:hover:bg-orange-500'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* Premium Banner Ad (Below Trending) */}
@@ -378,7 +403,7 @@ export function CommunityFeed({
                 </p>
                 <div className="flex gap-2">
                   <button className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all">
-                    7일 무료 체험
+                    7일 ���료 체험
                   </button>
                   <button className="px-4 py-2 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-white/80 dark:hover:bg-gray-700/80 transition-all">
                     더 알아보기
@@ -500,6 +525,12 @@ export function CommunityFeed({
           onFollowToggle={handleFollowToggle}
           isFollowing={followingList.includes(selectedUser.id)}
           myPosts={mockPosts}
+        />
+      )}
+
+      {showAttendanceModal && (
+        <AttendanceCheckModal
+          onClose={() => setShowAttendanceModal(false)}
         />
       )}
     </div>
