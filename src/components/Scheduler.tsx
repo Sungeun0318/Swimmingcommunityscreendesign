@@ -282,6 +282,19 @@ export function Scheduler() {
           onClose={() => setSelectedDayWorkout(null)}
           day={selectedDayWorkout.day}
           workout={selectedDayWorkout.workout}
+          onEdit={(workout) => {
+            console.log('Editing workout:', workout);
+            alert('수정 기능은 곧 추가됩니다!');
+          }}
+          onDelete={(day) => {
+            console.log('Deleting workout for day:', day);
+            alert('훈련이 삭제되었습니다!');
+            setSelectedDayWorkout(null);
+          }}
+          onShare={(workout) => {
+            console.log('Sharing workout:', workout);
+            alert('피드 공유 기능은 곧 추가됩니다!');
+          }}
         />
       )}
       {showAddWorkout && <AddWorkoutModal onClose={() => setShowAddWorkout(false)} onSave={(workout) => {
@@ -290,7 +303,26 @@ export function Scheduler() {
         setShowAddWorkout(false);
       }} />}
       {selectedWorkoutDetail && (
-        <WorkoutDetailModal onClose={() => setSelectedWorkoutDetail(null)} workout={selectedWorkoutDetail} />
+        <WorkoutDetailModal 
+          onClose={() => setSelectedWorkoutDetail(null)} 
+          workout={selectedWorkoutDetail}
+          onEdit={(workout) => {
+            console.log('Editing workout:', workout);
+            // Here you would open an edit modal or navigate to edit screen
+            alert('수정 기능은 곧 추가됩니다!');
+          }}
+          onDelete={(workoutId) => {
+            console.log('Deleting workout:', workoutId);
+            // Here you would delete the workout from your data
+            alert('훈련이 삭제되었습니다!');
+            setSelectedWorkoutDetail(null);
+          }}
+          onShare={(workout) => {
+            console.log('Sharing workout:', workout);
+            // Here you would open the CreatePost modal with workout data
+            alert('피드 공유 기능은 곧 추가됩니다!');
+          }}
+        />
       )}
     </div>
   );

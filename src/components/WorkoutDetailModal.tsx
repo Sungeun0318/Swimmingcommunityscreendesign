@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Waves, Clock, Award, Calendar, MapPin, TrendingUp } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Waves, Clock, Award, Calendar, TrendingUp, Edit, Trash2, MessageSquare, Share2, Camera, Image as ImageIcon, Plus } from 'lucide-react';
 
 interface WorkoutStep {
   step: number;
@@ -21,15 +21,29 @@ interface Workout {
   status: string;
   description?: string;
   steps?: WorkoutStep[];
+  memo?: string;
+  photos?: string[];
+  reminder?: {
+    enabled: boolean;
+    time: string;
+  };
 }
 
 interface WorkoutDetailModalProps {
   workout: Workout;
   onClose: () => void;
   onStart?: () => void;
+  onEdit?: (workout: Workout) => void;
+  onDelete?: (workoutId: number) => void;
+  onShare?: (workout: Workout) => void;
 }
 
-export function WorkoutDetailModal({ workout, onClose, onStart }: WorkoutDetailModalProps) {
+export function WorkoutDetailModal({ workout, onClose, onStart, onEdit, onDelete, onShare }: WorkoutDetailModalProps) {
+  const [memo, setMemo] = useState(workout.memo || '');
+  const [isEditingMemo, setIsEditingMemo] = useState(false);
+  const [photos, setPhotos] = useState<string[]>(workout.photos || []);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   // Default workout steps if not provided
   const workoutSteps: WorkoutStep[] = workout.steps || [
     { step: 1, description: '워밍업: 자유형, 편하게', distance: '200m', sets: 1, cycle: '3:00', intensity: '60%' },
@@ -39,11 +53,39 @@ export function WorkoutDetailModal({ workout, onClose, onStart }: WorkoutDetailM
     { step: 5, description: '쿨다운: 자유형 편하게', distance: '300m', sets: 1, cycle: 'Easy', intensity: '50%' }
   ];
 
+  const handleSaveMemo = () => {
+    setIsEditingMemo(false);
+    // Here you would save the memo to the backend
+    console.log('Saving memo:', memo);
+  };
+
+  const handleAddPhoto = () => {
+    // Simulate photo upload - in production, use actual file input
+    const demoPhotos = [
+      'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592409438460-f0fa6e8a4059?w=400&h=300&fit=crop',
+    ];
+    const randomPhoto = demoPhotos[Math.floor(Math.random() * demoPhotos.length)];
+    setPhotos([...photos, randomPhoto]);
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(workout.id);
+      onClose();
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center">
       <div className="bg-white dark:bg-card w-full sm:max-w-2xl sm:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300">
         {/* Header */}
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-br from-blue-500 to-purple-600">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-cyan-500 dark:to-blue-600">
           <div className="flex items-center justify-between">
             <div className="text-white flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -64,6 +106,31 @@ export function WorkoutDetailModal({ workout, onClose, onStart }: WorkoutDetailM
               className="p-2 hover:bg-white/20 rounded-lg transition-colors"
             >
               <X className="w-5 h-5 text-white" />
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mt-4">
+            <button
+              onClick={() => onEdit?.(workout)}
+              className="flex-1 flex flex-col items-center gap-1 p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
+            >
+              <Edit className="w-6 h-6" />
+              <span className="text-sm">수정</span>
+            </button>
+            <button
+              onClick={() => onShare?.(workout)}
+              className="flex-1 flex flex-col items-center gap-1 p-4 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
+            >
+              <Share2 className="w-6 h-6" />
+              <span className="text-sm">공유</span>
+            </button>
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-20 flex flex-col items-center gap-1 p-4 bg-white/10 hover:bg-red-500/20 rounded-xl transition-colors"
+            >
+              <Trash2 className="w-5 h-5" />
+              <span className="text-sm">삭제</span>
             </button>
           </div>
         </div>
@@ -107,6 +174,100 @@ export function WorkoutDetailModal({ workout, onClose, onStart }: WorkoutDetailM
                 {workoutSteps.length}회
               </div>
             </div>
+          </div>
+
+          {/* Photos Section */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <Camera className="w-4 h-4 text-gray-500" />
+                사진 첨부
+              </h4>
+              <button
+                onClick={handleAddPhoto}
+                className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 dark:bg-cyan-500 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-cyan-600 transition-colors text-sm"
+              >
+                <Plus className="w-4 h-4" />
+                추가
+              </button>
+            </div>
+            {photos.length > 0 ? (
+              <div className="grid grid-cols-3 gap-2">
+                {photos.map((photo, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={photo}
+                      alt={`Photo ${index + 1}`}
+                      className="w-full h-24 object-cover rounded-lg"
+                    />
+                    <button
+                      onClick={() => handleRemovePhoto(index)}
+                      className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 text-gray-400 dark:text-gray-500">
+                <ImageIcon className="w-12 h-12 mb-2" />
+                <p className="text-sm">첨부된 사진이 없습니다</p>
+              </div>
+            )}
+          </div>
+
+          {/* Memo Section */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-gray-500" />
+                메모
+              </h4>
+              {!isEditingMemo && (
+                <button
+                  onClick={() => setIsEditingMemo(true)}
+                  className="text-sm text-blue-500 dark:text-cyan-400 hover:text-blue-600 dark:hover:text-cyan-300"
+                >
+                  {memo ? '수정' : '추가'}
+                </button>
+              )}
+            </div>
+            {isEditingMemo ? (
+              <div className="space-y-3">
+                <textarea
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value)}
+                  placeholder="훈련에 대한 메모를 남겨보세요... (예: 오늘 컨디션 좋았음, 어깨 통증 있음)"
+                  className="w-full h-24 p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none resize-none"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleSaveMemo}
+                    className="flex-1 py-2 bg-blue-500 dark:bg-cyan-500 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-cyan-600 transition-colors text-sm"
+                  >
+                    저장
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsEditingMemo(false);
+                      setMemo(workout.memo || '');
+                    }}
+                    className="flex-1 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm"
+                  >
+                    취소
+                  </button>
+                </div>
+              </div>
+            ) : memo ? (
+              <p className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap">
+                {memo}
+              </p>
+            ) : (
+              <p className="text-gray-400 dark:text-gray-500 text-sm">
+                메모를 추가하여 훈련에 대한 기록을 남겨보세요
+              </p>
+            )}
           </div>
 
           {/* Workout Program Table */}
@@ -215,6 +376,40 @@ export function WorkoutDetailModal({ workout, onClose, onStart }: WorkoutDetailM
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-card rounded-2xl p-6 max-w-sm w-full animate-in zoom-in duration-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-gray-900 dark:text-gray-100">훈련 삭제</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">정말 삭제하시겠습니까?</p>
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              이 작업은 되돌릴 수 없습니다. 훈련 기록, 메모, 사진이 모두 삭제됩니다.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+              >
+                삭제
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

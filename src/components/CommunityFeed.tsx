@@ -3,8 +3,6 @@ import { PostCard } from './PostCard';
 import { TrendingUp, Flame, ChevronDown, Check, ChevronLeft, ChevronRight, X, ExternalLink, Crown, Search, UserPlus, Calendar } from 'lucide-react';
 import { UserSearch } from './UserSearch';
 import { UserProfile } from './UserProfile';
-import { TrendingPostsSection } from './TrendingPostsSection';
-import { AttendanceCheckModal } from './AttendanceCheckModal';
 
 interface CommunityFeedProps {
   onCreatePost: () => void;
@@ -60,7 +58,7 @@ export function CommunityFeed({
   ];
 
   const trendingPosts = [
-    { id: 1, title: '🔥 올림픽 코치의 자유형 마스��클래스', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
+    { id: 1, title: '🔥 올림픽 코치의 자유형 마스클래스', likes: 1249, image: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?w=400&h=200&fit=crop' },
     { id: 2, title: '💪 7일만에 평영 마스터하기', likes: 892, image: 'https://images.unsplash.com/photo-1530115638250-8f7f42475f5e?w=400&h=200&fit=crop' },
     { id: 3, title: '⚡ 세계 챔피언의 배영 턴 비법', likes: 756, image: 'https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=400&h=200&fit=crop' },
     { id: 4, title: '🏊 경기 수영 선수를 위한 혼영 훈련', likes: 645, image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400&h=200&fit=crop' },
@@ -298,26 +296,6 @@ export function CommunityFeed({
       {/* Trending Posts Carousel - Only show for "All Posts" view */}
       {activeView === 'all' && (
         <>
-          {/* Attendance Check Button */}
-          <button
-            onClick={() => setShowAttendanceModal(true)}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-500 dark:from-green-600 dark:to-emerald-600 rounded-2xl p-4 text-white hover:shadow-lg transition-all flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                <Calendar className="w-6 h-6" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-semibold">출석 체크하기</h3>
-                <p className="text-sm text-white/80">오늘의 출석을 기록하세요!</p>
-              </div>
-            </div>
-            <div className="text-2xl">✅</div>
-          </button>
-
-          {/* Trending Posts Section */}
-          <TrendingPostsSection />
-
           <div 
             className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 transition-colors duration-300"
             onMouseEnter={() => setIsPaused(true)}
@@ -403,7 +381,7 @@ export function CommunityFeed({
                 </p>
                 <div className="flex gap-2">
                   <button className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:shadow-lg transition-all">
-                    7일 ���료 체험
+                    7일 료 체험
                   </button>
                   <button className="px-4 py-2 bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-white/80 dark:hover:bg-gray-700/80 transition-all">
                     더 알아보기
@@ -525,12 +503,6 @@ export function CommunityFeed({
           onFollowToggle={handleFollowToggle}
           isFollowing={followingList.includes(selectedUser.id)}
           myPosts={mockPosts}
-        />
-      )}
-
-      {showAttendanceModal && (
-        <AttendanceCheckModal
-          onClose={() => setShowAttendanceModal(false)}
         />
       )}
     </div>
