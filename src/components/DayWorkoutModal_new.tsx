@@ -219,8 +219,7 @@ export function DayWorkoutModal({ day, workout, onClose, onEdit, onDelete, onSha
                 <p className="text-gray-400 dark:text-gray-500 text-sm">
                   메모를 추가하여 훈련에 대한 기록을 남겨보세요
                 </p>
-              )}
-            </div>
+              )}\n            </div>
 
             {/* Workout Details Table */}
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
@@ -313,7 +312,8 @@ export function DayWorkoutModal({ day, workout, onClose, onEdit, onDelete, onSha
           <div className="bg-white dark:bg-card rounded-2xl p-6 max-w-sm w-full animate-in zoom-in duration-200">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-500" />\n              </div>
+                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-500" />
+              </div>
               <div>
                 <h3 className="text-gray-900 dark:text-gray-100">훈련 삭제</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">정말 삭제하시겠습니까?</p>
